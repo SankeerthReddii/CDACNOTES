@@ -1,0 +1,407 @@
+TYPES OF MODULES
+1)builtin module
+2)userdefined module:
+3)third party modules:express,react
+==>neither given by nodejs offically nor created by project developer.these modules are provided by 3rd party organization.
+==>we need to install them manually.
+==>to install /uninstall 3rd party module then there is a component of nodejs i.e npm(node package manager)
+
+========================================================================
+
+==>node is a software which executes js file. what type of software this node is?gui or cli
+  CLI: Command line interface application
+npm is a CLI and we need to write command to install/uninstall any module.
+==>we will get npm with node js
+
+install: npm install module-name // install 3rd party module
+uninstall:npm uninstall module-name
+
+npm install express
+npm install mysql
+
+run**
+>>npm install express
+//whenever a 3rd party module will be install into a project,we will get 3 things into our folder 
+node_modules folder
+package.json file
+package-lock.json file
+
+===============================================================================
+
+1)node_modules folder -->all the folder/files related to the install module will be stored here.
+
+2)package.json file-->when u install any module,automatically package.json file will be created ..it is always recommended to have this file.whenever u r creating any node application, u must create package.json file manually..contain only json object inside .json file i.e key value pair.
+
+==>metadata of our project is stored into this file.
+name,version of project ,author,description(for what purpose u r creating project) when we install any  3rd party module/dependencies its name and version will be stored in package.json automatically.every developers will get idea by reading at package.json file that which dependencies are install in my project.
+
+{
+"dependencies" :{
+"express":"4.19.2"
+}
+}
+//it has created dependencies key  and inside that object has been assigned, all the entry of 3rd party modules name  will go in dependencies key and value as a version.
+
+
+ways to create package.json file
+generate this file with the help of npm.
+>>npm init //   it will ask for inputs and it will generate package.json
+
+now if i want to install any dependencies,
+npm install express
+it will create package.json,dependencies is added as a key.
+
+
+suppose we want to migrate our application from 1 system to another system.at the time of project migration or when we have to upload our project onto git repository, we will not carry node_modules folder. we will push all the remaining things other than node_modules. now onto the new system we will have entire project without node_modules but all the dependencies names has been there in package.json file.
+but installing 1 by 1 dependencies will get lots of time. alternate thing is 
+now to install all dependencies present in package.json file just execute the following command.
+npm install  ===>this command will go in package.json file and install all the req dependencies
+
+3)package-lock.json file
+created for internal use. user cannot do any modifications.
+this file contains linking of dependency name with the folder and filename in node module
+==>package.json contains dependency and node_modules contains there actual folder and filename.
+==>this file contains linking of which dependencies is having what kind of files and folders in node modules.
+=============================================================
+
+
+
+Types of 3rd party modules
+1)local module: a module that has been install specifically in a project 
+ex express and we can use local module only in the project where we have install it.
+==>only local module related files will be stored in node_modules folder.only local modules entry will be there in package.json files .
+==>local modules is referred as dependencies
+>>npm install modulename //this module will be install locally directly in your project.
+
+==>The module which provides already defined code (function,classes,properties) has to installed locally .and these modules reffered as dependencies.
+
+
+
+
+2) global module:a module that has not been installed in a project so instead it will be installed at the global location.(installation location of node js) now any project can access global module.
+==>global module related files will not be stored in node_modules folder.nor entry will be there in package.json files . global module cannot provide dependency.these modules will only give service.
+
+>>npm install -g modulename
+
+note: no storage in node+module and no entry in package.json
+======================================================================
+what will be the deciding factor to go for local or global module?
+there are few 3rd party modules those are not providing any function,classes and properties instead of these module will provide us a CLI.it is always recommended any module who provides cli we install them globally. these modules cannot be called as dependency because these modules are just performing some specific operations and these modules we r not using in source code.
+
+1)nodemon cli:this cli will only executes the program.  purpose is it will detect changes in the source code as soon as we have saved a file ,it will restart the server by itself.
+
+npm install -g nodemon
+// files wont store in node_module and entry wont be der in package.json 
+const http=require('http');
+const server=http.createServer((request,response)=>{
+response.write("hello");
+response.end();
+
+});
+server.listen(6700);
+
+>>npm install -g nodemon  ==> this will install as a global cli
+>>nodemon my-server.js
+
+browser:
+//change the source code
+see the changes on console as restarting server due to changes.server will start on its own.
+===================================================================
+
+Express js
+
+//creating application from scratch takes lots of time.
+its a framework that will provide predefined modules,functions,classes and properties. using express js we can make our server development a bit more easy as compared to js code which we are writing from scratch.
+
+const http=require('http');
+const server=http.createserver(req,res)
+{
+res.write("res");
+res.end();
+);
+server.listen(6700);
+
+ques?how many function is der to handle req from client and process response to the client?
+createserver is the only function that accept each and every req and gives response.
+but in real time scenario our application need to deal with n number of  sub url.
+12.0.0.1:6700 //base url
+12.0.0.1:6700 /login   suburl
+12.0.0.1:6700 /signup   suburl
+12.0.0.1:6700 /users   suburl
+
+
+100 of url we can write
+ whenever u will send request to base url then also function will execute.if we pass request to/login url then also this function will get execute. that means if we are passing request to any url  in that case only this function will be called.
+
+ques?on each url are we going to pass same response or different response?
+==>function  should send different response for each url then how it will be possible by 1 function.
+problem is to process request and response we have 1 function in any realtime applications we are having lots of different url and for each url,we have to process each req differently and give response for each url differently.
+==>single url can contain different sub url's
+ex
+12.0.0.1:6700 /signup    it may be case this url is requested for GET method
+12.0.0.1:6700 /signup same url is requested for delete  method
+on same url with different methods,we need to execute different operations
+
+
+hows possible?
+==>whenever we are having request,for any of the url ,so that request will be assigned into 1st argument and using this request object we are going to read the url.with the help of request object,we can check for which url,request has been sent.
+==>we have to check requested url everytime in javascript and validate with the stored url
+ex:if(url=='127.0.0.1:6700')
+==>we cant follow the above approach manually. just to avoid this we are going to use express framework,in which we are going to handle this issues in very effective ways.
+===========================================================================
+
+
+
+
+create foldername as express-demo, right click on folder, open in terminal
+cmd
+cd express-demo
+
+1)create pakage.json  ==>npm init
+package name:
+description:first express  app
+
+
+yes
+//created package.json file.
+
+
+
+
+2)open project in vs
+create index.js file
+//install express ==>npm install express
+open terminal in vs(open ur folder)
+npm install express
+
+==>see the entry of express module dependency in package.json file.
+=====================================
+import statement:
+note:require() has become old approach ,now the new approach is import statement given by jsx
+to require any module .
+
+import {specific functions} from 'module';
+import{writeFile,readFile} from 'fs';
+
+
+program:
+import{writeFile} from 'fs';
+writeFile('demo.txt','hello world',(error)=>{
+console.log("data saved");
+});
+
+>>node index.js
+error
+
+there are two types of convention to write js code
+1)common js(BY DEFAULT) so import cannot be used directly in common js. we have to tell interpreter we r not usingcommon js ,we are using ES. for that go in package.json file and we have to generate  1 key as "type":"module"; // it allows ES features
+2)ES
+
+program:
+import{writeFile} from 'fs';
+writeFile('demo.txt','hello world',(error)=>{
+console.log("data saved");
+});
+>>node index.js
+
+
+adv is we are requring only function not the entire module. optimization is der by using import statement
+
+===========================================================
+==>for getting started with express js:
+==>instead of directly creating server, we will create express application that will be eqivalent to server.
+
+step 1: import express module
+import {funct1,funct2} from 'module';//import only specific function
+import express1 from 'express'; // equivalent to  const express1=require('express); 
+//we are importing complete module
+//we are importing express module and giving reference as express1 which is pointing to express module.
+
+step 2:use reference to call fun for creating express application
+const app=express1();//express()1 will create an express application/server
+//return reference of newly created express server/application
+
+step 3:
+app.listen(portno);// start the server
+===========================================================
+import express1 from 'express';
+const app=express1();
+app.listen(7500,()=>{
+
+console.log("server has started on 7500")
+
+});
+node index.js  
+
+===================================================================
+we have different url's 
+127.0.0.1:7500 use GET-->send response as welcome to express app
+127.0.0.1:7500/login//send response as welcome to login
+127.0.0.1:7500/signup//send response as  welcome to signup
+
+our express app should have this url.and onto each url server should send different response
+==>Routing:based on url we need to write certain specific handling.in  express ,for each url,we have to write different handlers.
+==>send different response for each url/each routing.in express each url is going to have its seperate function to handle req and response
+
+const app=express(); //return reference of newly created express server/application
+app.get(url,callback) //get() for GET METHOD  //we need to know url and method for creating routing. for GET request method,get() should be called
+==================
+app.get("/",(req,res)=>{    /is used for based url
+
+);
+whenever get request is passed to the server application on the specified url then mentioned callback will run
+=======================
+app.get("/login",(req,res)=>{
+
+});
+
+
+======================
+import express from 'express';
+const app=express();
+app.get("/",(req,res)=>{
+res.send("welcome to express app"); // to send response
+});
+app.get("/login",(req,res)=>{
+res.send("welcome to login");
+});
+app.listen(7500,()=>{
+
+console.log("server has started")
+
+});
+
+>>node index.js  or     nodemon index.js
+start server node index.js
+http://127.0.0.1:7500/login
+-===================================
+import express from 'express';
+const app=express();
+app.get("/",(req,res)=>{
+res.send("welcome to express app"); // to send response
+});
+app.get("/square",(req,res)=>{
+    var n=4;
+    var sq=n*n;
+res.send({square:sq});
+});
+app.listen(6500,()=>{
+
+console.log("server has started1")
+
+});
+==========================================
+==>Always a server cant decide the inputs,like for which value we need to perform operations.so a client can send data on url.
+server is deciding for which input we have to  calculate the square.but in real life ,client should provide the input send along with request on to the server.
+==>client will send data to the server on the url(with the help of url)
+
+==>127.0.0.1:6500/square/4
+==>127.0.0.1:6500/sum/2/5
+==>data maintained on url is known as url parameter
+==>when we are defining the route then we have to specify the  no of url parameter and at which point of url we have specified that url parameter.
+  
+==>
+app.get('/square/:n');
+app.get('/sum/:a/:b');
+
+
+==>to read the value of url parameter ,we will use req object. 
+==>express server will create a json object for all the url parameters for each and every route and given its name as params and assign this object into request object.
+
+params={n:4};
+{
+a:5,
+b:6
+}
+and this json object name is parameters.
+
+
+request={
+		params={
+			n:4
+			a:5,
+			b:6
+				
+		}
+}
+
+
+
+
+	
+
+======================================================
+http://127.0.0.1:6500/square/5
+
+import express from 'express';
+const app=express();
+app.get("/",(req,res)=>{
+res.send("welcome to express app"); // to send response
+});
+app.get('/square/:n',(req,res)=>{
+console.log(req.params);//gives json obj
+res.send("hello square");
+});
+app.listen(6500,()=>{
+
+console.log("server has started1")
+
+});
+================================================
+import express from 'express';
+const app=express();
+app.get("/",(req,res)=>{
+res.send("welcome to express app"); // to send response
+});
+app.get('/square/:n',(req,res)=>{
+var x=req.params.n * req.params.n;//gives json obj
+res.send("hello square"+x);
+
+});
+app.listen(6500,()=>{
+
+console.log("server has started1")
+
+});
+=============
+import express from 'express';
+const app=express();
+app.get("/",(req,res)=>{
+res.send("welcome to express app"); // to send response
+});
+app.get('/square/:n',(req,res)=>{
+var x=req.params.n * req.params.n;//gives json obj
+res.send("hello square"+x);
+
+});
+app.get('/sum/:a/:b',(req,res)=>{
+    var x=req.params.a + req.params.b;//gives json obj
+    res.send({sum:x});
+    
+    });
+app.listen(6500,()=>{
+
+console.log("server has started1")
+
+});
+======================
+import express from 'express';
+const app=express();
+app.get("/",(req,res)=>{
+res.send("welcome to express app"); // to send response
+});
+app.get('/square/:n',(req,res)=>{
+var x=req.params.n * req.params.n;//gives json obj
+res.send("hello square"+x);
+
+});
+app.get('/sum/:a/:b',(req,res)=>{
+    var x=parseInt(req.params.a) + parseInt(req.params.b);//gives json obj
+    res.send({sum:x});
+    
+    });
+app.listen(6500,()=>{
+
+console.log("server has started1")
+
+});
